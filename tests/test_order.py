@@ -6,21 +6,18 @@ from pages import order_page
 from curl import main_site
 from locators.order_locators import OrderLocators
 from pages.order_page import OrderPage
+from data import test_personal_info_data
 
 
 class TestOrder:
 
-    @pytest.mark.parametrize("name, lastname, address, station, phone", [
-        ("Иван", "Иванов", "ул. Пушкина, 1", "Черкизовская", "+79001112233"),
-        ("Анна", "Петрова", "ул. Лермонтова, 5", "Тверская", "+79009998877")
-    ])
+    @pytest.mark.parametrize("name, lastname, address, station, phone", test_personal_info_data)
     @allure.title("Тест заказа аренды самоката и переход на главную страницу")
     def test_input_personal_information(self, driver, name, lastname, address, station, phone):
         order_page = OrderPage(driver)
         order_page.click_on_button_cookie()
         order_page.click_order_button()
 
-        #name, lastname, address, station, phone = generate_personal_information()
         order_page.fill_form_personal_information(name, lastname, address, station, phone)
         order_page.click_submit_order()
         order_page.wait_visibility_header_rental()
